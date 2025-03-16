@@ -182,7 +182,8 @@ print(result.scalar())
 
 #grupowanie
 query = sqlalchemy.select(sqlalchemy.func.year(worker_table.c.birthday), sqlalchemy.func.count()) \
-    .group_by(sqlalchemy.func.year(worker_table.c.birthday))
+    .group_by(sqlalchemy.func.year(worker_table.c.birthday)) \
+    .having(sqlalchemy.func.count() > 1)
 result = connection.execute(query)
 print(result.fetchall())
 

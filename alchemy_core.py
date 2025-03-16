@@ -73,12 +73,33 @@ print(result.fetchall())
 
 # print('Andrzej' == 'Janek')
 
-#Sortowanie
+#Sortowanie, też może mieć limit(2)
 query = (sqlalchemy.select(worker_table) \
          .order_by(worker_table.c.first_name.desc(),
                    worker_table.c.last_name.desc()
                    ))
 result = connection.execute(query)
 print(result.fetchall())
+
+#Sortowanie 2
+query = sqlalchemy.select(worker_table) \
+         .order_by(worker_table.c.first_name.desc()) \
+         .order_by(worker_table.c.last_name) \
+         .limit(2) \
+         .offset(1)
+
+result = connection.execute(query)
+print(result.fetchall())
+
+# Filtrowanie
+query = sqlalchemy.select(worker_table) \
+    .where(worker_table.c.pesel == '11111')
+result = connection.execute(query)
+print(result.fetchall())
+
+# print(type(query))
+# print(query)
+# print(query.compile().params)
+
 
 connection.close()

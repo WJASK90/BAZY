@@ -18,7 +18,7 @@ driver = 'ODBC+Driver+17+for+SQL+Server'
 # dialect+driver://username:password@host:port/database?dodatkowe_opcje_klucz_wartość
 engine = create_engine(
     f'mssql+pyodbc://{suszi_login}:{database_password}@{server}/{suszi_login}?driver={driver}&Encrypt=no',
-    echo=True #dzieki temu widzimy co SQLAlchemy robi aby dojsc do wyniku
+    echo=False #dzieki temu widzimy co SQLAlchemy robi aby dojsc do wyniku
 )
 
 # connection = engine.connect()
@@ -46,5 +46,26 @@ connection = engine.connect()
 query = sqlalchemy.select(worker_table)
 result = connection.execute(query)
 print(result.fetchall())
+
+# perpared statement?
+expression = worker_table.columns.first_name == 'Andrzej'
+print(type(expression))
+print(expression.compile().params)
+print(worker_table.columns.first_name == 'Andrzej')
+
+query = sqlalchemy.select(
+    worker_table.c.first_name, #c. to column
+    worker_table.c.last_name
+)
+
+#inny sposob zapisania tego co jest na gorze
+# query = sqlalchemy.select(
+#     worker_table.c['first_name', 'last_name']
+# )
+
+result = connection.execute(query)
+print(result.fetchall())
+
+# print('Andrzej' == 'Janek')
 
 connection.close()

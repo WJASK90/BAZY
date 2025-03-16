@@ -22,4 +22,4 @@ CREATE TABLE workers
 )
 
 INSERT INTO workers (pesel, first_name, last_name, birthday)
-VALUES ('11111', 'Andrzej', 'Chudzicki', '2000-01-01')
+VALUES ('333333', 'Martyna', 'Kowalska', '2000-01-01')

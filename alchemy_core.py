@@ -66,6 +66,19 @@ query = sqlalchemy.select(
 result = connection.execute(query)
 print(result.fetchall())
 
+# Limit/Top
+query = sqlalchemy.select(worker_table).limit(2)
+result = connection.execute(query)
+print(result.fetchall())
+
 # print('Andrzej' == 'Janek')
+
+#Sortowanie
+query = (sqlalchemy.select(worker_table) \
+         .order_by(worker_table.c.first_name.desc(),
+                   worker_table.c.last_name.desc()
+                   ))
+result = connection.execute(query)
+print(result.fetchall())
 
 connection.close()

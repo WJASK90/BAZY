@@ -56,6 +56,11 @@ class Account:
             print("Brak środków, spróbuj ponownie!")
             connection.rollback()
 
+    # def show_transaction(self): #druga część laboratorium
+    #     cursor = connection.execute("SELECT @@IDENTITY AS ID")
+    #     connection.execute('SELECT DATETIME AS transaction_time')
+    #     connection.execute('SELECT FLOAT AS AMOUNT')
+    #     print(f"{accounts} posiadane środki {})
 
 
 if __name__ == '__main__':

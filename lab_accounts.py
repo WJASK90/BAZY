@@ -56,7 +56,6 @@ class Account:
             print("Brak środków, spróbuj ponownie!")
             connection.rollback()
 
-    def show_transaction(self):
 
 
 if __name__ == '__main__':

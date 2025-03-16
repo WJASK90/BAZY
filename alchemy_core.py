@@ -165,9 +165,25 @@ print(result.fetchall())
 
 #LIKE
 query = sqlalchemy.select(worker_table) \
-    .where(worker_table.c.first_name.like('And%'))
+    .where(worker_table.c.first_name.like('And%')) #najpierw musi byc where a reszta nie jest tak wazna, jesli chodzi o porzadek
 result = connection.execute(query)
 print(result.fetchall())
 
+
+#Agregacja, mozemy tez filtrowac z WHERE
+query = sqlalchemy.select(sqlalchemy.func.count()).select_from(worker_table)
+result = connection.execute(query)
+print(result.scalar()) #wynik ktory rozpakowuje pierwsza kolumen ktora dostajemy w wyniku, zwraca 1 kolumne z 1 wiersza
+
+# Min/Max, mozemy tez filtrowac z WHERE
+query = sqlalchemy.select(sqlalchemy.func.min(worker_table.c.birthday))
+result = connection.execute(query)
+print(result.scalar())
+
+#grupowanie
+query = sqlalchemy.select(sqlalchemy.func.year(worker_table.c.birthday), sqlalchemy.func.count()) \
+    .group_by(sqlalchemy.func.year(worker_table.c.birthday))
+result = connection.execute(query)
+print(result.fetchall())
 
 connection.close()

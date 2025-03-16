@@ -45,11 +45,16 @@ class Account:
             raise ValueError('Nie masz wystarczających środków na koncie')
         return round(self.balance, 2)
 
-
     def send_founds(self, amount: float, account):
-        self.withdraw(amount, auto_commit=False)
-        account.deposit(amount, auto_commit=False)
-        connection.commit()
+
+        try:
+            self.withdraw(amount, auto_commit=False)
+            account.deposit(amount, auto_commit=False)
+            if account.withdraw(amount) > account.balance:
+                connection.commit()
+        except:
+            print("Podana wartość jest niepoprawna, spróbuj ponownie!")
+            connection.rollback()
 
 if __name__ == '__main__':
     # account = Account('Andrzej')
@@ -60,3 +65,16 @@ if __name__ == '__main__':
     account_jan = Account('Jan', 10)
     account_michal = Account('Michał', 10)
     account_jan.send_founds(7, account_michal)
+
+
+    # def send_founds(self, amount: float, account):
+    #     self.withdraw(amount, auto_commit=False)
+    #     account.deposit(amount, auto_commit=False)
+    #     connection.commit()
+    #     if account.withdraw(amount) > account.balance:
+    #         try:
+    #             float(input('Nie masz wystarczających środków, podaj poprawną liczbę środków' + {}))
+    #             connection.commit()
+    #         except:
+    #             print("Podana wartość jest niepoprawna, spróbuj ponownie")
+    #             connection.rollback()

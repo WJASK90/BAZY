@@ -20,3 +20,6 @@ CREATE TABLE workers
     last_name  VARCHAR(255) NOT NULL,
     birthday   DATE         NOT NULL CHECK (birthday < GETDATE()) --GETDATE czyli dzisiejsza data
 )
+
+INSERT INTO workers (pesel, first_name, last_name, birthday)
+VALUES ('11111', 'Andrzej', 'Chudzicki', '2000-01-01')

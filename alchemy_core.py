@@ -1,8 +1,8 @@
 # for driver in pyodbc.drivers(): #sprawdzamy jakie mamy drivery
 #     print(driver)
+#https://docs.sqlalchemy.org/en/20/core/ INFORMACJE O SQL ALCHEMY CORE!!!!!!!!!
 
 import os
-import pyodbc
 from sqlalchemy import create_engine
 import sqlalchemy
 
@@ -18,11 +18,33 @@ driver = 'ODBC+Driver+17+for+SQL+Server'
 # dialect+driver://username:password@host:port/database?dodatkowe_opcje_klucz_wartość
 engine = create_engine(
     f'mssql+pyodbc://{suszi_login}:{database_password}@{server}/{suszi_login}?driver={driver}&Encrypt=no',
+    echo=True #dzieki temu widzimy co SQLAlchemy robi aby dojsc do wyniku
 )
+
+# connection = engine.connect()
+
+# query = sqlalchemy.text("SELECT * FROM workers WHERE pesel=:filter_pesel")
+# result = connection.execute(query, {"filter_pesel": '111111'})
+# print(result.fetchall())
+
+# connection.close()
+
+
+metadata = sqlalchemy.MetaData()
+
+worker_table = sqlalchemy.Table('workers', metadata,  # deklarujemy jak tabela wyglada
+                                sqlalchemy.Column('pesel', sqlalchemy.String(11), primary_key=True),
+                                sqlalchemy.Column('first_name', sqlalchemy.String(255), nullable=False),
+                                sqlalchemy.Column('last_name', sqlalchemy.String(255), nullable=False),
+                                sqlalchemy.Column('birthday', sqlalchemy.Date, nullable=False),
+                                )
+
 
 connection = engine.connect()
 
-result = connection.execute(sqlalchemy.text("SELECT * FROM workers"))
+# query = sqlalchemy.text("SELECT * FROM workers WHERE pesel=:filter_pesel")
+query = sqlalchemy.select(worker_table)
+result = connection.execute(query)
 print(result.fetchall())
 
 connection.close()

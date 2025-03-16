@@ -53,21 +53,23 @@ class Account:
             if account.withdraw(amount) > account.balance:
                 connection.commit()
         except:
-            print("Podana wartość jest niepoprawna, spróbuj ponownie!")
+            print("Brak środków, spróbuj ponownie!")
             connection.rollback()
 
     def show_transaction(self):
 
 
 if __name__ == '__main__':
+    account_jan = Account('Jan', 10)
+    account_michal = Account('Michał', 10)
+    account_jan.send_founds(7, account_michal)
+
+
     # account = Account('Andrzej')
     # account.deposit(10)
     # account.deposit(0.1)
     # balance = account.withdraw(5)
     # print(balance)
-    account_jan = Account('Jan', 10)
-    account_michal = Account('Michał', 10)
-    account_jan.send_founds(7, account_michal)
 
 
     # def send_founds(self, amount: float, account):

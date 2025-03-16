@@ -39,7 +39,7 @@ CREATE TABLE address
 
 TRUNCATE TABLE workers
 
--- Insert addresses
+-- Insert addresses!
 INSERT INTO address (country, city, street, postal_code)
 VALUES ('Polska', 'Warszawa', 'Marszałkowska 10', '00-001'),
        ('Polska', 'Kraków', 'Floriańska 15', '31-019'),

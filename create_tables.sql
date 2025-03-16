@@ -21,5 +21,7 @@ CREATE TABLE workers
     birthday   DATE         NOT NULL CHECK (birthday < GETDATE()) --GETDATE czyli dzisiejsza data
 )
 
+ALTER TABLE workers ADD address_id INT
+
 INSERT INTO workers (pesel, first_name, last_name, birthday)
 VALUES ('333333', 'Martyna', 'Kowalska', '2000-01-01')

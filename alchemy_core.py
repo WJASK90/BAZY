@@ -37,6 +37,7 @@ worker_table = sqlalchemy.Table('workers', metadata,  # deklarujemy jak tabela w
                                 sqlalchemy.Column('first_name', sqlalchemy.String(255), nullable=False),
                                 sqlalchemy.Column('last_name', sqlalchemy.String(255), nullable=False),
                                 sqlalchemy.Column('birthday', sqlalchemy.Date, nullable=False),
+                                sqlalchemy.Column('address_id', sqlalchemy.Integer),
                                 )
 
 
@@ -100,6 +101,73 @@ print(result.fetchall())
 # print(type(query))
 # print(query)
 # print(query.compile().params)
+
+#AND
+query = sqlalchemy.select(worker_table) \
+    .where((worker_table.c.address_id > 1) & (worker_table.c.address_id < 4))
+result = connection.execute(query)
+print(result.fetchall())
+
+#AND 2
+query = sqlalchemy.select(worker_table) \
+    .where(worker_table.c.address_id > 1) \
+    .where(worker_table.c.address_id < 4)
+result = connection.execute(query)
+print(result.fetchall())
+
+#AND 3
+query = sqlalchemy.select(worker_table) \
+    .where(sqlalchemy.and_(worker_table.c.address_id > 1, worker_table.c.address_id < 4))
+result = connection.execute(query)
+print(result.fetchall())
+
+# OR  uzywamy pipe |
+query = sqlalchemy.select(worker_table) \
+    .where((worker_table.c.address_id > 1) | (worker_table.c.address_id < 4))
+result = connection.execute(query)
+print(result.fetchall())
+
+#OR 2
+query = sqlalchemy.select(worker_table) \
+    .where(sqlalchemy.or_(worker_table.c.address_id > 1, worker_table.c.address_id < 4))
+result = connection.execute(query)
+print(result.fetchall())
+
+#imie Andrzej lub Martyna i Adres Id > 2
+query = sqlalchemy.select(worker_table) \
+    .where(
+    (worker_table.c.first_name == 'Andrzej') |
+    (worker_table.c.first_name == 'Martyna') &
+    (worker_table.c.address_id > 1)
+)
+result = connection.execute(query)
+print(result.fetchall())
+
+# query = sqlalchemy.select(worker_table) \
+#     .where(
+#     sqlalchemy.and_(
+#         sqlalchemy.or_(worker_table.c.first_name == 'Andrzej', worker_table.c.first_name == 'Martyna'),
+#         worker_table.c.address_id > 1),
+#     )
+# )
+# result = connection.execute(query)
+# print(result.fetchall())
+
+query = sqlalchemy.select(worker_table) \
+    .where(
+    sqlalchemy.and_(
+        worker_table.c.first_name.in_(['Andrzej', 'Martyna']),
+        worker_table.c.address_id > 1
+    )
+)
+result = connection.execute(query)
+print(result.fetchall())
+
+#LIKE
+query = sqlalchemy.select(worker_table) \
+    .where(worker_table.c.first_name.like('And%'))
+result = connection.execute(query)
+print(result.fetchall())
 
 
 connection.close()

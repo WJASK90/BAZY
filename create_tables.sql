@@ -12,3 +12,11 @@ CREATE TABLE transactions
     transaction_time DATETIME,
     amount           FLOAT,
 )
+
+CREATE TABLE workers
+(
+    pesel      VARCHAR(11) PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name  VARCHAR(255) NOT NULL,
+    birthday   DATE         NOT NULL CHECK (birthday < GETDATE()) --GETDATE czyli dzisiejsza data
+)

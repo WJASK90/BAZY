@@ -1,9 +1,9 @@
+# for driver in pyodbc.drivers(): #sprawdzamy jakie mamy drivery
+#     print(driver)
+
 import os
 
 import pyodbc
-
-# for driver in pyodbc.drivers(): #sprawdzamy jakie mamy drivery
-#     print(driver)
 
 from dotenv import load_dotenv
 load_dotenv()

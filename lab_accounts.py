@@ -56,6 +56,9 @@ class Account:
             print("Podana wartość jest niepoprawna, spróbuj ponownie!")
             connection.rollback()
 
+    def show_transaction(self):
+
+
 if __name__ == '__main__':
     # account = Account('Andrzej')
     # account.deposit(10)

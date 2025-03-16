@@ -35,8 +35,10 @@ connection= pyodbc.connect(connection_string)
 cursor = connection.cursor() #kursor iteruje bo elementach bazy danych? UWAGA Kursor iteruje do przodu, nie moze sie cofać!
 
 new_name = input('Podaj nowe imię: ')
+old_name = input('Podaj stare imię: ')
 
-cursor.execute("UPDATE users SET name='?' WHERE name = 'Nowe'", (new_name,))
+#PREPARED STATEMENT uzywamy aby bronic sie przed SQL INJECTION
+cursor.execute("UPDATE users SET name='?' WHERE name =?", (new_name,))
 cursor.commit()
 
 print(f'{cursor.rowcount} wierszy zmienionych')

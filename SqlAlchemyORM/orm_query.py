@@ -1,13 +1,16 @@
 from orm_connection import Session
 from sqlalchemy import *
+from sqlalchemy.orm import joinedload
 from alchemy_orm import Author
 
 session = Session()
 
+#jeden autor - 1
+select_authors = select(Author).options(joinedload(Author.books), joinedload(Author.address)).filter_by(id=1) #referencja do klasy Author / w options podajem tabele ktore chcemy dociagnac / metoda filter_by po id filter_by(id=1) albo .where(Author.id > 1)
+a = session.execute(select_authors).unique().scalar_one() #.all() #dodajemy metode unique() przed all() #z filter_by(id=1) i scalar_one() zamiast scalars bedziemy mieli w wyniku 1 autora
 
-select_authors = select(Author) #referencja do klasy Author
-all_authors = session.execute(select_authors).scalars().all()
-print(all_authors)
+print(f'Autor {a.name} napisał {len(a.books)} książek i mieszka w {a.address.country} {a.address.city}')
 
-for a in all_authors:
-    print(f'Autor {a.name} napisał {len(a.books)} książek i mieszka w {a.address.country} {a.address.city}')
+#jeden autor - 2
+a = session.get(Author, 9999)
+print(a)

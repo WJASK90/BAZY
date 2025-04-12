@@ -29,7 +29,7 @@ class Author(Base): #klasa o naszych Użytkownikach, którzy mają odpowiedniki 
     middle_name: Mapped[Optional[str]] #było tak = mapped_column(String(255), nullable=True) ale dzięki optional (import na gorze) możemy usunąć
 
     books: Mapped[List['Book']] = relationship(back_populates='author', cascade='delete, delete-orphan') #połączenie z relationship(back_populates='books')
-    adress: Mapped['Address'] = relationship(back_populates='author', cascade='delete, delete-orphan')
+    address: Mapped['Address'] = relationship(back_populates='author', cascade='delete, delete-orphan')
 class Address(Base):
     __tablename__ = 'address'
 

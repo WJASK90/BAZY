@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 load_dotenv()
 
 database_password = os.environ.get('DATABASE_PASSWORD')
-suszi_login = 'chudzick'
+suszi_login = 'wjaskot'
 server = 'morfeusz.wszib.edu.pl'
 driver = 'ODBC+Driver+17+for+SQL+Server'
 
@@ -24,7 +24,7 @@ worker_table = Table('workers', metadata, #nazwa, metadane
                      Column('first_name', String(255), nullable=False),
                      Column('last_name', String(255), nullable=False),
                      Column('birthday', Date, nullable=False),
-                     Column('address_id', Integer)
+                     Column('address_id', Integer, ForeignKey('address.address_id')) #klucz obcy
                      )
 
 address_table = Table('address', metadata, #nazwa, metadane
@@ -36,3 +36,5 @@ address_table = Table('address', metadata, #nazwa, metadane
                       )
 
 connection = engine.connect()
+
+print(metadata.tables)

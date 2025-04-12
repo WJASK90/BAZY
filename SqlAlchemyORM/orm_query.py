@@ -1,7 +1,8 @@
 from orm_connection import Session
 from sqlalchemy import *
 from sqlalchemy.orm import joinedload
-from alchemy_orm import Author
+from alchemy_orm import Author, Address, Book
+import datetime
 
 session = Session()
 
@@ -14,3 +15,17 @@ print(f'Autor {a.name} napisał {len(a.books)} książek i mieszka w {a.address.
 #jeden autor - 2
 a = session.get(Author, 9999)
 print(a)
+
+# Insert (autor = konstruktor)
+author = Author(name='Andrzej', email='email', login='login', middle_name='middle')
+author.address = Address(country='Litwa', city='Wilno')
+author.books = [
+    Book(title='Jeden', publication_date=datetime.date.today()),
+    Book(title='Dwa', publication_date=datetime.date.today()),
+]
+
+session.add(author)
+session.commit()
+
+#UPDATE
+author = session.get(Author, 7)

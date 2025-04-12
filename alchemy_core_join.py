@@ -68,4 +68,4 @@ if __name__ == '__main__':
     query = select(worker_table, address_table.c.country) \
         .join(worker_table, worker_table.c.address_id == address_table.c.address_id)
     result = connection.execute(query)
-    print(result.all())  # tylko PESEL i tylko PANSTWO
+    print(result.all())  #

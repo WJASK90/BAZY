@@ -48,7 +48,18 @@ if __name__ == '__main__':
 
 #ZŁĄCZENIE + konkretne kolumny
     query = select(worker_table.c.pesel, address_table.c.country) \
-        .select_from(worker_table.join(address_table))
+        .select_from(worker_table.join(address_table)) #metodata SELECT FROM
     result = connection.execute(query)
     print(result.all()) #tylko PESEL i tylko PANSTWO
 
+#ZŁĄCZENIE + konkretne kolumny - 2
+    query = select(worker_table.c.pesel, address_table.c.country) \
+        .join_from(worker_table, address_table) #metoda JOIN
+    result = connection.execute(query)
+    print(result.all()) #tylko PESEL i tylko PANSTWO
+
+#ZŁĄCZENIE + konkretne kolumny - 3
+    query = select(worker_table.c.pesel, address_table.c.country) \
+        .join(address_table) #metoda JOIN gdzie sql dedukuje ze laczymy worker i address, sam sie tego "domyslil", musza byc tylko 2 do wyboru
+    result = connection.execute(query)
+    print(result.all()) #tylko PESEL i tylko PANSTWO

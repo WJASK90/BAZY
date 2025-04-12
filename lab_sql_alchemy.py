@@ -119,28 +119,45 @@ print(result.all())
 #insert skomentowany poniewaz kolejne odswiezenia beda duplikatami i beda bledy
 
 #UPDATE
-update_sql = update(worker_table).values(first_name='Zmienione').where(worker_table.c.address_id == 1002)
-connection.execute(update_sql)
-connection.commit()
+# update_sql = update(worker_table).values(first_name='Zmienione').where(worker_table.c.address_id == 1002)
+# connection.execute(update_sql)
+# connection.commit()
+#
+# # Delete #delete(tabela).gdzie(co takiego)
+# delete_sql = delete(worker_table).where(worker_table.c.address_id == 1002)
+# connection.execute(update_sql)
+# connection.commit()
+#
+# #INSERT - 2
+# insert_sql = insert(address_table) \
+#     .values(country='Polska', city='Kraków', street='Aleja Kijowska 15', postal_code='30-387')
+# result = connection.execute(insert_sql)
+#
+# new_address_id = result.inserted_primary_key[0]
+#
+# insert_many = insert(worker_table)
+# connection.execute(insert_many, [
+#     {'pesel': '1111111111', 'first_name': 'Nowy', 'last_name': 'Jeden', 'birthday': '2000-01-01', 'address_id': new_address_id},
+#     {'pesel': '2222222222', 'first_name': 'Nowy', 'last_name': 'Dwa', 'birthday': '2000-01-01', 'address_id': new_address_id},
+# ])
+# connection.commit()
 
-# Delete #delete(tabela).gdzie(co takiego)
-delete_sql = delete(worker_table).where(worker_table.c.address_id == 1002)
-connection.execute(update_sql)
-connection.commit()
+#TUTAJ ZACZYNA SIE LABORATORIUM 3
 
-#INSERT - 2
-insert_sql = insert(address_table) \
-    .values(country='Polska', city='Kraków', street='Aleja Kijowska 15', postal_code='30-387')
-result = connection.execute(insert_sql)
 
-new_address_id = result.inserted_primary_key[0]
+query = select(worker_table.c.city, address_table.c.country) \
+    .join(
+    address_table)  \
+    .where(address_table.c.city == 'Warszawa') \
+    .where(address_table.c.country == 'Polska') \
+    .group_by(func.year(worker_table.c.birthday).desc()) \
 
-insert_many = insert(worker_table)
-connection.execute(insert_many, [
-    {'pesel': '1111111111', 'first_name': 'Nowy', 'last_name': 'Jeden', 'birthday': '2000-01-01', 'address_id': new_address_id},
-    {'pesel': '2222222222', 'first_name': 'Nowy', 'last_name': 'Dwa', 'birthday': '2000-01-01', 'address_id': new_address_id},
-])
-connection.commit()
+query_AM = select(worker_table.c.first_name, worker_table.c.last_name) \
+    .where(worker_table.c.first_name.like('A%') | worker_table.c.first_name.like('M%'))
 
+
+
+result = connection.execute(query)
+print(result.all())
 
 

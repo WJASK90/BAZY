@@ -20,7 +20,7 @@ engine = create_engine(
 metadata = MetaData()
 
 worker_table = Table('workers', metadata, #nazwa, metadane
-                     Column('pesel', String(11), primary_key=True),
+                     Column('pesel', String(11), primary_key=True), #klucz glowny
                      Column('first_name', String(255), nullable=False),
                      Column('last_name', String(255), nullable=False),
                      Column('birthday', Date, nullable=False),
@@ -28,7 +28,7 @@ worker_table = Table('workers', metadata, #nazwa, metadane
                      )
 
 address_table = Table('address', metadata, #nazwa, metadane
-                      Column('address_id', Integer, primary_key=True, autoincrement=True),
+                      Column('address_id', Integer, primary_key=True, autoincrement=True), #klucz glowny
                       Column('country', String(255), nullable=False),
                       Column('city', String(255), nullable=False),
                       Column('street', String(255), nullable=False),
@@ -37,4 +37,10 @@ address_table = Table('address', metadata, #nazwa, metadane
 
 connection = engine.connect()
 
-print(metadata.tables)
+#laczenie tabel jest proste kiedy mamy oznaczone w kodzie klucze glowne i obce
+
+if __name__ == '__main__':
+    query = select(worker_table.join(address_table)) #metoda JOIN przekuzujesz co chcesz laczyc czyli address_table
+    result = connection.execute(query)
+    print(worker_table.join(address_table))
+    print(result.fetchall())

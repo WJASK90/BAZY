@@ -63,3 +63,9 @@ if __name__ == '__main__':
         .join(address_table) #metoda JOIN gdzie sql dedukuje ze laczymy worker i address, sam sie tego "domyslil", musza byc tylko 2 do wyboru
     result = connection.execute(query)
     print(result.all()) #tylko PESEL i tylko PANSTWO
+
+# ZŁĄCZENIE + konkretne kolumny + ON
+    query = select(worker_table, address_table.c.country) \
+        .join(worker_table, worker_table.c.address_id == address_table.c.address_id)
+    result = connection.execute(query)
+    print(result.all())  # tylko PESEL i tylko PANSTWO

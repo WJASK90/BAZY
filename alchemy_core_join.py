@@ -91,3 +91,14 @@ if __name__ == '__main__':
         .where(worker_table.c.last_name == 'Kozłowski')
     result = connection.execute(query)
     print(result.all())  #
+
+#Full combo (wszystkie metody?)
+    query = select(func.year(worker_table.c.birthday), func.count().label("Liczba urodzonych w danym roku w Krakowie")) \
+    .join(address_table) \
+    .where(address_table.c.city == 'Kraków') \
+    .group_by(func.year(worker_table.c.birthday)) \
+    .order_by(Column('Liczba urodzonych w danym roku w Krakowie').desc()) \
+    .having(func.count() > 1)
+
+result = connection.execute(query)
+print(result.all())

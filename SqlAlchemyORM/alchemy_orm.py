@@ -1,15 +1,18 @@
 from typing import Optional, Annotated
 from sqlalchemy import *
 from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped #Mapped jest klasą generyczną można w [] podawać typ danych
+import datetime
 
 
 str255 = Annotated[str, mapped_column(String(255))]
 intpk = Annotated[int, mapped_column(Integer, primary_key=True, autoincrement=True)]
 
+library_metadata = MetaData(schema = 'library_orm')
+
 Base = DeclarativeBase()
 
 class Base(DeclarativeBase):
-    pass
+    metadata = library_metadata #wszystkie klasy beda rejestrowane pod nasze Metadaty
 
 # class Base(DeclarativeBase):
     # type_annotation_map = {
@@ -25,4 +28,11 @@ class User(Base): #klasa o naszych Użytkownikach, którzy mają odpowiedniki w 
     login: Mapped[str] = mapped_column(String(100), default='No Login')
     middle_name: Mapped[Optional[str]] #było tak = mapped_column(String(255), nullable=True) ale dzięki optional (import na gorze) możemy usunąć
 
+class Book(Base):
+    __tablename__ = 'book'
 
+    id: Mapped[intpk]
+    title: Mapped[str255] #to samo co VARCHAR(255)
+    description: Mapped[Optional[str]] #oznacza VARCHAR(MAX)
+    publication_date: Mapped[datetime.date]
+#mamy zdefiniowaną tabele

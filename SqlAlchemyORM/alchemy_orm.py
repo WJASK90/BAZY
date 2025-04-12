@@ -1,6 +1,6 @@
-from typing import Optional, Annotated
+from typing import Optional, Annotated, List
 from sqlalchemy import *
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped #Mapped jest klasą generyczną można w [] podawać typ danych
+from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, relationship #Mapped jest klasą generyczną można w [] podawać typ danych
 import datetime
 
 
@@ -28,11 +28,14 @@ class User(Base): #klasa o naszych Użytkownikach, którzy mają odpowiedniki w 
     login: Mapped[str] = mapped_column(String(100), default='No Login')
     middle_name: Mapped[Optional[str]] #było tak = mapped_column(String(255), nullable=True) ale dzięki optional (import na gorze) możemy usunąć
 
+    books: Mapped[List['Book']] = relationship(back_populates='user')#połączenie z relationship(back_populates='books')
+
 class Book(Base):
     __tablename__ = 'book'
 
     id: Mapped[intpk]
     title: Mapped[str255] #to samo co VARCHAR(255)
     description: Mapped[Optional[str]] #oznacza VARCHAR(MAX)
-    publication_date: Mapped[datetime.date]
-#mamy zdefiniowaną tabele
+    publication_date: Mapped[datetime.date] #mamy zdefiniowaną tabele
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id')) #user id = tabela i do czego sie odnosi
+    author: Mapped['User'] = relationship(back_populates='books')#połączenie z relationship(back_populates='user')

@@ -39,8 +39,16 @@ connection = engine.connect()
 
 #laczenie tabel jest proste kiedy mamy oznaczone w kodzie klucze glowne i obce
 
+#ZŁĄCZENIE INNER
 if __name__ == '__main__':
     query = select(worker_table.join(address_table)) #metoda JOIN przekuzujesz co chcesz laczyc czyli address_table
     result = connection.execute(query)
     print(worker_table.join(address_table))
-    print(result.fetchall())
+    print(result.fetchall()) #mozna tez print(result.all())
+
+#ZŁĄCZENIE + konkretne kolumny
+    query = select(worker_table.c.pesel, address_table.c.country) \
+        .select_from(worker_table.join(address_table))
+    result = connection.execute(query)
+    print(result.all()) #tylko PESEL i tylko PANSTWO
+

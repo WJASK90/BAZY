@@ -19,7 +19,7 @@ engine = create_engine(
 
 metadata = MetaData()
 
-worker_table = Table('workers', metadata,
+worker_table = Table('workers', metadata, #nazwa, metadane
                      Column('pesel', String(11), primary_key=True),
                      Column('first_name', String(255), nullable=False),
                      Column('last_name', String(255), nullable=False),

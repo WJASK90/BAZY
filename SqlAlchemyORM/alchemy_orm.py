@@ -14,6 +14,13 @@ Base = DeclarativeBase()
 class Base(DeclarativeBase):
     metadata = library_metadata #wszystkie klasy beda rejestrowane pod nasze Metadaty
 
+events_authors = Table(
+    'events_authors',
+    Base.metadata,
+    Column('author_id', ForeignKey('author.id')),
+    Column('event_id', ForeignKey('event.id')),
+)
+
 # class Base(DeclarativeBase):
     # type_annotation_map = {
     #     str255: String(255)
@@ -30,6 +37,21 @@ class Author(Base): #klasa o naszych Użytkownikach, którzy mają odpowiedniki 
 
     books: Mapped[List['Book']] = relationship(back_populates='author', cascade='delete, delete-orphan') #połączenie z relationship(back_populates='books')
     address: Mapped['Address'] = relationship(back_populates='author', cascade='delete, delete-orphan')
+
+    def __str__(self):
+        return f'{self.name} {self.middle_name}'
+
+    def __repr__(self):
+        return f'{self.name} {self.middle_name}'
+
+class Event(Base):
+    __tablename__ = 'event'
+
+    id: Mapped[intpk]
+    name: Mapped[str255]
+
+    participants: Mapped[List['Author']] = relationship(secondary=events_authors)
+
 class Address(Base):
     __tablename__ = 'address'
 
@@ -37,7 +59,7 @@ class Address(Base):
     country: Mapped[str255]
     city: Mapped[str255]
     author_id: Mapped[int] = mapped_column(ForeignKey('author.id'))
-    author: Mapped['Author'] = relationship(back_populates='addresses')
+    author: Mapped['Author'] = relationship(back_populates='address')
 
 class Book(Base):
     __tablename__ = 'book'

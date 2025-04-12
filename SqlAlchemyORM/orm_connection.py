@@ -22,7 +22,7 @@ engine = create_engine(
 Session = sessionmaker(engine)
 
 if __name__ == '__main__':
-    session = Session()
-    session.execute(CreateSchema('Library_orm')) #schemat
-    session.commit() #schemat
+    # session = Session()
+    # session.execute(CreateSchema('Library_orm')) #schemat
+    # session.commit() #schemat
     Base.metadata.create_all(engine)

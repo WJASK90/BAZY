@@ -1,4 +1,10 @@
 import customtkinter as ctk
+from alchemy_orm import Author
+from orm_connection import Session
+from CTkTable import CTkTable
+
+
+session = Session()
 
 def add_author():
     print("Dodanie autora kliknięte!")
@@ -21,5 +27,15 @@ if __name__ == '__main__':
 
     add_author_button = ctk.CTkButton(menu_bar, text='Dodaj autora', command=add_author) #command czyli ze zadzieje sie funkcja po kliknieciu na przycisku
     add_author_button.grid(row=0, column=1, padx=10, pady=10)
+
+    app_content = ctk.CTkFrame(app)
+    app_content.grid(row=1, column=0, padx=10, pady=10, stikcy='nsew')
+
+    authors = session.execute(select(Author)).scalars().all()
+    authors_data = [['ID', 'Imię', 'Drugie imię', 'Email', 'Login']] + \
+                   [[a.id, a.name, a.middle_name, a.email, a.login] for a in authors]
+    authors_table = CTkTable(master=app_content, row=len(authors), values=authors_data, column=len(authors_data[0]))
+
+    authors_table.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
 
     app.mainloop()

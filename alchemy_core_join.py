@@ -69,3 +69,25 @@ if __name__ == '__main__':
         .join(worker_table, worker_table.c.address_id == address_table.c.address_id)
     result = connection.execute(query)
     print(result.all())  #
+
+# Potwierdzenie ze zlaczenie jest INNER
+    query = select(worker_table, address_table.c.country) \
+        .join(worker_table).where(worker_table.c.last_name == 'Kozłowski')
+    result = connection.execute(query)
+    print(result.all())  #szukamy wszystkie wyniki z nazwiskiem KOZŁOWSKI, wynik: nie znaleziony
+
+#ALIAS tabeli
+    w = worker_table.alias()
+    a = address_table.alias()
+
+    query = select(w, a.c.country) \
+        .join(w)
+    result = connection.execute(query)
+    print(result.all())
+
+# Left join ze zmienna ISOUTER=TRUE
+    query = select(worker_table, address_table.c.country) \
+        .join(address_table, isouter=True) \
+        .where(worker_table.c.last_name == 'Kozłowski')
+    result = connection.execute(query)
+    print(result.all())  #

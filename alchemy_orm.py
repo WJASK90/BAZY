@@ -1,5 +1,4 @@
-from typing import Optional
-from typing import Annotated
+from typing import Optional, Annotated
 from sqlalchemy import *
 from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped #Mapped jest klasą generyczną można w [] podawać typ danych
 

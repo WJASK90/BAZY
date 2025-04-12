@@ -19,8 +19,8 @@ class Base(DeclarativeBase):
     #     str255: String(255)
     # }
 
-class User(Base): #klasa o naszych Użytkownikach, którzy mają odpowiedniki w tabeli
-    __tablename__ = 'user'
+class Author(Base): #klasa o naszych Użytkownikach, którzy mają odpowiedniki w tabeli
+    __tablename__ = 'author'
     
     id: Mapped[intpk] #było = mapped_column(primary_key=True, autoincrement=True) ale dajemy intpk #definiujemy zmienna na naszej Klasie i kolumne INTEGER, Klucz Glowny i autoinkrementalna
     name: Mapped[str] = mapped_column(String()) #odpowiednik VARCHAR(MAX)
@@ -28,7 +28,14 @@ class User(Base): #klasa o naszych Użytkownikach, którzy mają odpowiedniki w 
     login: Mapped[str] = mapped_column(String(100), default='No Login')
     middle_name: Mapped[Optional[str]] #było tak = mapped_column(String(255), nullable=True) ale dzięki optional (import na gorze) możemy usunąć
 
-    books: Mapped[List['Book']] = relationship(back_populates='user')#połączenie z relationship(back_populates='books')
+    books: Mapped[List['Book']] = relationship(back_populates='author', cascade='delete, delete-orphan') #połączenie z relationship(back_populates='books')
+
+class Address(Base):
+    __tablename__ = 'address'
+
+    id: Mapped[intpk]
+    country: Mapped[str255]
+    city: Mapped[str255]
 
 class Book(Base):
     __tablename__ = 'book'
@@ -37,5 +44,5 @@ class Book(Base):
     title: Mapped[str255] #to samo co VARCHAR(255)
     description: Mapped[Optional[str]] #oznacza VARCHAR(MAX)
     publication_date: Mapped[datetime.date] #mamy zdefiniowaną tabele
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id')) #user id = tabela i do czego sie odnosi
-    author: Mapped['User'] = relationship(back_populates='books')#połączenie z relationship(back_populates='user')
+    author_id: Mapped[int] = mapped_column(ForeignKey('author.id')) #author id = tabela i do czego sie odnosi
+    author: Mapped['Author'] = relationship(back_populates='books') #połączenie z relationship(back_populates='author')

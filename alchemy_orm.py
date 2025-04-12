@@ -4,14 +4,17 @@ from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped #Mapped jest k
 
 
 str255 = Annotated[str, mapped_column(String(255))]
-intpk = Annotated[int, mapped_column(Integer, primary_key=True, auto_increment=True)]
+intpk = Annotated[int, mapped_column(Integer, primary_key=True, autoincrement=True)]
 
 Base = DeclarativeBase()
 
 class Base(DeclarativeBase):
-    type_annotation_map = {
-        str255: String(255)
-    }
+    pass
+
+# class Base(DeclarativeBase):
+    # type_annotation_map = {
+    #     str255: String(255)
+    # }
 
 class User(Base): #klasa o naszych Użytkownikach, którzy mają odpowiedniki w tabeli
     __tablename__ = 'user'

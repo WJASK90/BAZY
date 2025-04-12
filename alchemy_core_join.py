@@ -102,3 +102,42 @@ if __name__ == '__main__':
 
 result = connection.execute(query)
 print(result.all())
+
+#INSERT
+# insert_sql = insert(address_table) \
+#     .values(country='Polska', city='Kraków', street='Aleja Kijowska 15', postal_code='30-387')
+# connection.execute(insert_sql)
+# connection.commit() #musi być COMMIT aby zaktualizować, dodalismy nowy adres do tabeli
+
+# insert_many = insert(worker_table)
+# connection.execute(insert_many, [
+#     {'pesel': '1111111111', 'first_name': 'Nowy', 'last_name': 'Jeden', 'birthday': '2000-01-01', 'address_id': 1002},
+#     {'pesel': '2222222222', 'first_name': 'Nowy', 'last_name': 'Dwa', 'birthday': '2000-01-01', 'address_id': 1002},
+# ])
+# connection.commit() #dodajemy wiecej niz jeden wiersz do naszej tabeli
+
+#insert skomentowany poniewaz kolejne odswiezenia beda duplikatami i beda bledy
+
+#UPDATE
+update_sql = update(worker_table).values(first_name='Zmienione').where(worker_table.c.address_id == 1002)
+connection.execute(update_sql)
+connection.commit()
+
+# Delete #delete(tabela).gdzie(co takiego)
+delete_sql = delete(worker_table).where(worker_table.c.address_id == 1002)
+connection.execute(update_sql)
+connection.commit()
+
+#INSERT - 2
+insert_sql = insert(address_table) \
+    .values(country='Polska', city='Kraków', street='Aleja Kijowska 15', postal_code='30-387')
+result = connection.execute(insert_sql)
+
+new_address_id = result.inserted_primary_key[0]
+
+insert_many = insert(worker_table)
+connection.execute(insert_many, [
+    {'pesel': '1111111111', 'first_name': 'Nowy', 'last_name': 'Jeden', 'birthday': '2000-01-01', 'address_id': new_address_id},
+    {'pesel': '2222222222', 'first_name': 'Nowy', 'last_name': 'Dwa', 'birthday': '2000-01-01', 'address_id': new_address_id},
+])
+connection.commit()

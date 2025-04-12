@@ -16,16 +16,31 @@ print(f'Autor {a.name} napisał {len(a.books)} książek i mieszka w {a.address.
 a = session.get(Author, 9999)
 print(a)
 
-# Insert (autor = konstruktor)
-author = Author(name='Andrzej', email='email', login='login', middle_name='middle')
-author.address = Address(country='Litwa', city='Wilno')
-author.books = [
-    Book(title='Jeden', publication_date=datetime.date.today()),
-    Book(title='Dwa', publication_date=datetime.date.today()),
-]
+# Insert #(autor = konstruktor)
+# author = Author(name='Andrzej', email='email', login='login', middle_name='middle')
+# author.address = Address(country='Litwa', city='Wilno')
+# author.books = [
+#     Book(title='Jeden', publication_date=datetime.date.today()),
+#     Book(title='Dwa', publication_date=datetime.date.today()),
+# ]
+#
+# session.add(author)
+# session.commit()
+
+# UPDATE - cascade delete-orphan
+author = session.get(Author, 7)
+author.middle_name = 'Jan'
+for b in author.books[:1]:
+    if b.title == 'Jeden':
+        b.description = 'To jest pierwsza książka!'
 
 session.add(author)
 session.commit()
 
-#UPDATE
+#DELETE
 author = session.get(Author, 7)
+session.delete(author)
+session.commit()
+
+
+

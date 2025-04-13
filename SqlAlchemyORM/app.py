@@ -2,12 +2,56 @@ import customtkinter as ctk
 from alchemy_orm import Author
 from orm_connection import Session
 from CTkTable import CTkTable
+from sqlalchemy import select
 
 
 session = Session()
 
+def add_author_to_db(author: Author):
+    session.add(author)
+    session.commit()
+    #walidacja itp
+    popup_to_close.destroy()
+
 def add_author():
-    print("Dodanie autora kliknięte!")
+    add_author_popup = ctk.CTkToplevel(master=app)
+    add_author_popup.title("Dodaj autora")
+    add_author_popup.geometry('800x600')
+    # add_author_popup.focus_force() #metoda focus_force oznacza ze program sie skupia na tym popupie
+    # print("Dodanie autora kliknięte!")
+
+    add_author_popup.grid_columnconfigure(0, weight=1)
+
+    ctk.CTkLabel(add_author_popup, text='Dodanie nowego autora', font=ctk.CTkFont(size=30, weight='bold')) \
+        .grid(row=0, column=0, padx=20, pady=20) #os X i Y czyli padx i pady
+
+    # INPUTS
+
+    ctk.CTkLabel(add_author_popup, text='Imię i Nazwisko').grid(row=1, column=0, padx=20, pady=(20,0), sticky='w') #pady=(0,20) czyli z dolu 20 a z gory 0 na osi
+    #sticky=w gdzie w to WEST
+    name_input = ctk.CTkEntry(add_author_popup)
+    name_input.grid(row=2, column=0, padx=20, pady=20)
+
+    ctk.CTkLabel(add_author_popup, text='Email').grid(row=3, column=0, padx=20, pady=(20, 0),sticky='w')
+    email_input = ctk.CTkEntry(add_author_popup)
+    email_input.grid(row=4, column=0, padx=20, pady=20)
+
+    ctk.CTkLabel(add_author_popup, text='Login').grid(row=5, column=0, padx=20, pady=(20, 0), sticky='w')
+    login_input = ctk.CTkEntry(add_author_popup)
+    login_input.grid(row=6, column=0, padx=20, pady=20)
+
+    ctk.CTkLabel(add_author_popup, text='Drugię Imię').grid(row=7, column=0, padx=20, pady=(20, 0), sticky='w')
+    middle_name_input = ctk.CTkEntry(add_author_popup)
+    middle_name_input.grid(row=8, column=0, padx=20, pady=20)
+
+    # Add author button
+    ctk.CTkButton(add_author_popup, text='Dodaj autora',
+                  command=lambda: add_author_to_db(Author(
+                      first_name=name_input.get(),
+                      middle_name=middle_name_input.get(),
+                      email=email_input.get(),
+                      login=login_input.get()
+                  ))).grid(row=9, column=0, padx=20, pady=20, sticky='ew') #tworzymy przycisk DODAJ AUTORA
 
 if __name__ == '__main__':
     ctk.set_appearance_mode('dark') #ciemny wyglad
@@ -29,7 +73,7 @@ if __name__ == '__main__':
     add_author_button.grid(row=0, column=1, padx=10, pady=10)
 
     app_content = ctk.CTkFrame(app)
-    app_content.grid(row=1, column=0, padx=10, pady=10, stikcy='nsew')
+    app_content.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
 
     authors = session.execute(select(Author)).scalars().all()
     authors_data = [['ID', 'Imię', 'Drugie imię', 'Email', 'Login']] + \
